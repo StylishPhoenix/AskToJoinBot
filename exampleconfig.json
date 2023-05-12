@@ -1,0 +1,6 @@
+{
+	"token": "INSERT_BOT_TOKEN",
+	"guildId": "INSERT_GUILD_ID",
+	"voiceChannelId": "INSERT_QUIET_CHANNEL_ID",
+	"minimumMembers": 3
+}
