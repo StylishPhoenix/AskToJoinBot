@@ -1,6 +1,8 @@
 const { Client, Intents } = require('discord.js');
+const { token } = require(`./config.json`);
 const client = new Client({ intents: [Intents.FLAGS.Guilds, Intents.FLAGS.GuildMessages, Intents.FLAGS.GuildVoiceStates] });
-const token = 'YOUR_BOT_TOKEN';
+
+let lastVoteEndTime = 0;
 
 client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -20,9 +22,13 @@ client.on('interactionCreate', async (interaction) => {
   const { commandName } = interaction;
 
   if (commandName === 'asktojoin') {
-    const voiceChannel = interaction.guild.channels.cache.find(
-      (channel) => channel.name === 'Voice Channel Name'
-    );
+    const currentTime = Date.now();
+
+    if (currentTime - lastVoteEndTime < 60000) {
+      return interaction.reply('Please wait for one minute between votes.');
+    }
+
+    const voiceChannel = interaction.guild.channels.cache.get('YOUR_VOICE_CHANNEL_ID');
 
     if (!interaction.member.voice.channel) {
       return interaction.reply('You must be in a voice channel to use this command.');
@@ -30,9 +36,9 @@ client.on('interactionCreate', async (interaction) => {
 
     const members = voiceChannel.members;
 
-    if (members.size === 0) {
+    if (members.size < 3) {
       await interaction.member.voice.setChannel(voiceChannel);
-      return interaction.reply('There are no users in the voice channel. You have been moved in.');
+      return interaction.reply('You have been moved into the voice channel.');
     }
 
     const question = `Should ${interaction.user} be allowed to join the voice channel? React with ✅ or ❌`;
@@ -49,7 +55,11 @@ client.on('interactionCreate', async (interaction) => {
     await pollMessage.react('✅');
     await pollMessage.react('❌');
 
-    const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && !user.bot;
+    const filter = (reaction, user) => {
+      const member = voiceChannel.members.get(user.id);
+      return ['✅', '❌'].includes(reaction.emoji.name) && !user.bot && member;
+    };
+
     const collector = pollMessage.createReactionCollector(filter, { time: 60000 });
 
     collector.on('collect', (reaction, user) => {
@@ -61,6 +71,8 @@ client.on('interactionCreate', async (interaction) => {
     });
 
     collector.on('end', async () => {
+      lastVoteEndTime = Date.now();
+
       if (votes.yes > votes.no) {
         await interaction.member.voice.setChannel(voiceChannel);
         interaction.channel.send(`${interaction.user} has been allowed to join the voice channel.`);
