@@ -1,5 +1,5 @@
 const { Client, GatewayIntentBits } = require('discord.js');
-const { token } = require(`./config.json`);
+const { token, guildId, voiceChannelId, minimumMembers } = require(`./config.json`);
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages ] });
 
 let lastVoteEndTime = 0;
@@ -12,7 +12,7 @@ client.on('ready', async () => {
     description: 'Request to join a specific voice channel',
   };
 
-  const commands = await client.guilds.cache.get('YOUR_GUILD_ID')?.commands.set([data]);
+  const commands = await client.guilds.cache.get(guildId)?.commands.set([data]);
   console.log('Slash command registered:', commands);
 });
 
@@ -28,7 +28,7 @@ client.on('interactionCreate', async (interaction) => {
       return interaction.reply('Please wait for one minute between votes.');
     }
 
-    const voiceChannel = interaction.guild.channels.cache.get('YOUR_VOICE_CHANNEL_ID');
+    const voiceChannel = interaction.guild.channels.cache.get(voiceChannelId);
 
     if (!interaction.member.voice.channel) {
       return interaction.reply('You must be in a voice channel to use this command.');
@@ -36,7 +36,7 @@ client.on('interactionCreate', async (interaction) => {
 
     const members = voiceChannel.members;
 
-    if (members.size < 3) {
+    if (members.size < minimumMembers) {
       await interaction.member.voice.setChannel(voiceChannel);
       return interaction.reply('You have been moved into the voice channel.');
     }
