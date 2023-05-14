@@ -63,9 +63,9 @@ client.on('interactionCreate', async (interaction) => {
     const collector = pollMessage.createReactionCollector({filter: filter, max: members, time: 60000 });
 
     collector.on('collect', (reaction, user) => {
+      console.log('test');
       if (reaction.emoji.name === '✅') {
         votes.yes++;
-        console.log('test');
       } else if (reaction.emoji.name === '❌') {
         votes.no++;
       }
