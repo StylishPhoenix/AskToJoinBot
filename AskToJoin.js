@@ -51,8 +51,15 @@ client.on('interactionCreate', async (interaction) => {
     const pollMessage = await interaction.channel.send(
       `${members.map((member) => `<@${member.id}>`).join(', ')}, ${question}`
     );
-    await pollMessage.react('✅');
-    await pollMessage.react('❌');
+    const yesReaction = '✅';
+    const noReaction = '❌';
+    
+    await pollMessage.react(yesReaction);
+    await pollMessage.react(noReaction);
+    
+    pollMessage.reactions.cache.get(yesReaction).users.remove(client.user);
+    pollMessage.reactions.cache.get(noReaction).users.remove(client.user);
+    
 
     const filter = (reaction, user) => {
       const member = voiceChannel.members.get(user.id);
