@@ -51,13 +51,12 @@ client.on('interactionCreate', async (interaction) => {
     const pollMessage = await interaction.channel.send(
       `${members.map((member) => `<@${member.id}>`).join(', ')}, ${question}`
     );
-
+    console.log(members);
     await pollMessage.react('✅');
     await pollMessage.react('❌');
 
     const filter = (reaction, user) => {
       const member = voiceChannel.members.get(user.id);
-      console.log(member);
       return ['✅', '❌'].includes(reaction.emoji.name) && !user.bot && member;
     };
 
