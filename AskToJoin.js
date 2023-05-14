@@ -57,6 +57,7 @@ client.on('interactionCreate', async (interaction) => {
 
     const filter = (reaction, user) => {
       const member = voiceChannel.members.get(user.id);
+      console.log(member);
       return ['✅', '❌'].includes(reaction.emoji.name) && !user.bot && member;
     };
 
