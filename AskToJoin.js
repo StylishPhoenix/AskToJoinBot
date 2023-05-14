@@ -1,6 +1,6 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 const { token, guildId, voiceChannelId, minimumMembers } = require(`./config.json`);
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages ] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent ] });
 
 let lastVoteEndTime = 0;
 
@@ -51,7 +51,6 @@ client.on('interactionCreate', async (interaction) => {
     const pollMessage = await interaction.channel.send(
       `${members.map((member) => `<@${member.id}>`).join(', ')}, ${question}`
     );
-    console.log(members);
     await pollMessage.react('✅');
     await pollMessage.react('❌');
 
@@ -60,7 +59,7 @@ client.on('interactionCreate', async (interaction) => {
       return ['✅', '❌'].includes(reaction.emoji.name) && !user.bot && member;
     };
 
-    const collector = pollMessage.createReactionCollector({filter: filter, max: members, time: 60000 });
+    const collector = pollMessage.createReactionCollector({filter: filter, time: 60000 });
 
     collector.on('collect', (reaction, user) => {
       console.log('test');
