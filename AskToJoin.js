@@ -60,7 +60,7 @@ client.on('interactionCreate', async (interaction) => {
       return ['✅', '❌'].includes(reaction.emoji.name) && !user.bot && member;
     };
 
-    const collector = pollMessage.createReactionCollector(filter, { time: 60000 });
+    const collector = pollMessage.createReactionCollector({filter: filter, max: members, time: 60000 });
 
     collector.on('collect', (reaction, user) => {
       if (reaction.emoji.name === '✅') {
