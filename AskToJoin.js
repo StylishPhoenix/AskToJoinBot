@@ -48,6 +48,8 @@ client.on('interactionCreate', async (interaction) => {
       no: 0,
     };
 
+    await interaction.reply('Voting has started. Please wait for the result.');
+
     const pollMessage = await interaction.channel.send(
       `${members.map((member) => `<@${member.id}>`).join(', ')}, ${question}`
     );
@@ -56,10 +58,6 @@ client.on('interactionCreate', async (interaction) => {
     
     await pollMessage.react(yesReaction);
     await pollMessage.react(noReaction);
-    
-    pollMessage.reactions.cache.get(yesReaction).users.remove(client.user);
-    pollMessage.reactions.cache.get(noReaction).users.remove(client.user);
-    
 
     const filter = (reaction, user) => {
       const member = voiceChannel.members.get(user.id);
@@ -88,7 +86,6 @@ client.on('interactionCreate', async (interaction) => {
       }
     });
 
-    await interaction.reply('Voting has started. Please wait for the result.');
   }
 });
 
