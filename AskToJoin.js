@@ -13,7 +13,7 @@ client.on('ready', async () => {
   };
 
   const commands = await client.guilds.cache.get(guildId)?.commands.set([data]);
-  console.log('Slash command registered:', commands);
+  console.log('Slash command registered');
 });
 
 client.on('interactionCreate', async (interaction) => {
