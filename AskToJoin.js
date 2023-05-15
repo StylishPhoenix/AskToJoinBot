@@ -60,20 +60,27 @@ client.on('interactionCreate', async (interaction) => {
     await pollMessage.react(noReaction);
     
 const filter = (reaction, user) => {
-  return reaction.emoji.name === '✅';
+  return ['✅', '❌'].includes(reaction.emoji.name) && user.id === interaction.user.id;
 };
 
     pollMessage.awaitReactions({ filter: filter, time: 15000 })
-          .then(collected => { console.log(`test`); votes.yes++;})
+          .then(collected => {
+         		const reaction = collected.first();
+            if (reaction.emoji.name === '✅') {
+              message.reply('You reacted with a thumbs up.');
+            } else {
+              message.reply('You reacted with a thumbs down.');
+            })
           .catch(collected => {
-            lastVoteEndTime = Date.now();
-           if (votes.yes > votes.no) {
-        interaction.member.voice.setChannel(voiceChannel);
-        interaction.channel.send(`${interaction.user} has been allowed to join the voice channel.`);
-      } else {
-       interaction.channel.send(`${interaction.user} has been denied access to the voice channel.`);
-      }
+             message.reply('No one voted.');
     });
+    lastVoteEndTime = Date.now();
+    if (votes.yes > votes.no) {
+      interaction.member.voice.setChannel(voiceChannel);
+      interaction.channel.send(`${interaction.user} has been allowed to join the voice channel.`);
+    } else {
+      interaction.channel.send(`${interaction.user} has been denied access to the voice channel.`);
+    }
   }
 });
 
