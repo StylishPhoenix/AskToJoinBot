@@ -98,7 +98,7 @@ const filter = (reaction, user) => {
     }
   } */
 
-
+  }
 });
 
 client.login(token);
