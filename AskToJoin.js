@@ -63,8 +63,8 @@ const filter = (reaction, user) => {
   return reaction.emoji.name === '✅';
 };
 
-    pollMessage.awaitReactions({ filter: filter, time: 60000 })
-          .then(collected => { console.log(`test`); if (reaction.emoji.name === '✅') { votes.yes++; } else if (reaction.emoji.name === '❌') { votes.no++;} })
+    pollMessage.awaitReactions({ filter: filter, time: 15000 })
+          .then(collected => { console.log(`test`); interaction.channel.send(`${reaction.emoji.name}`); if (reaction.emoji.name === '✅') { votes.yes++; } else if (reaction.emoji.name === '❌') { votes.no++;} })
           .catch(collected => {
             lastVoteEndTime = Date.now();
            if (votes.yes > votes.no) {
