@@ -64,7 +64,7 @@ const filter = (reaction, user) => {
 };
 
     pollMessage.awaitReactions({ filter: filter, time: 15000 })
-          .then(collected => { console.log(`test`); votes.yes++;)
+          .then(collected => { console.log(`test`); votes.yes++;})
           .catch(collected => {
             lastVoteEndTime = Date.now();
            if (votes.yes > votes.no) {
