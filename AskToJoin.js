@@ -76,7 +76,8 @@ client.on('interactionCreate', async (interaction) => {
         }
         await i.deferUpdate();
       }else {
-        interaction.followUp({content: 'This button is not for you dumbass', ephemeral: true});
+        await i.deferUpdate();
+        i.followUp({content: 'This button is not for you dumbass', ephemeral: true});
     }
     });
 
