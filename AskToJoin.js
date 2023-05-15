@@ -63,16 +63,16 @@ const filter = (reaction, user) => {
   return ['✅', '❌'].includes(reaction.emoji.name) && user.id === interaction.user.id;
 };
 
-    pollMessage.awaitReactions({ filter: filter, time: 15000 })
+    pollMessage.awaitReactions({ filter: filter, time: 30000 })
           .then(collected => {
          		const reaction = collected.first();
             if (reaction.emoji.name === '✅') {
-              message.reply('You reacted with a thumbs up.');
+              pollMessage.reply('You reacted with a thumbs up.');
             } else {
-              message.reply('You reacted with a thumbs down.');
+              pollMessage.reply('You reacted with a thumbs down.');
             }})
           .catch(collected => {
-             message.reply('No one voted.');
+             pollMessage.reply('No one voted.');
     });
     lastVoteEndTime = Date.now();
     if (votes.yes > votes.no) {
