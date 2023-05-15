@@ -23,7 +23,7 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'asktojoin') {
     const collectorFilter = (reaction, user) => {
-      return reaction.emoji.name === '👍' && user.id === message.author.id;
+      return reaction.emoji.name === '👍' && user.id === interaction.author.id;
     };
     
     const collector = interaction.createReactionCollector({ filter: collectorFilter, time: 15000 });
