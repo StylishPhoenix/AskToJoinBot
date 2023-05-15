@@ -60,7 +60,7 @@ client.on('interactionCreate', async (interaction) => {
     await pollMessage.react(noReaction);
     
 const filter = (reaction, user) => {
-  return reaction.emoji.name === '👍' && user.id === message.author.id;
+  return reaction.emoji.name === '✅';
 };
 
     const collector = pollMessage.createReactionCollector({ filter: filter, time: 60000 });
