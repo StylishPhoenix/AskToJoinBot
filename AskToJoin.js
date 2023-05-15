@@ -22,7 +22,21 @@ client.on('interactionCreate', async (interaction) => {
   const { commandName } = interaction;
 
   if (commandName === 'asktojoin') {
-    const currentTime = Date.now();
+    const collectorFilter = (reaction, user) => {
+      return reaction.emoji.name === '👍' && user.id === message.author.id;
+    };
+    
+    const collector = interaction.createReactionCollector({ filter: collectorFilter, time: 15000 });
+    
+    collector.on('collect', (reaction, user) => {
+      console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+    });
+    
+    collector.on('end', collected => {
+      console.log(`Collected ${collected.size} items`);
+    });
+
+/*    const currentTime = Date.now();
 
     if (currentTime - lastVoteEndTime < 60000) {
       return interaction.reply('Please wait for one minute between votes.');
@@ -82,7 +96,9 @@ const filter = (reaction, user) => {
     } else {
       interaction.channel.send(`${interaction.user} has been denied access to the voice channel.`);
     }
-  }
+  } */
+
+
 });
 
 client.login(token);
