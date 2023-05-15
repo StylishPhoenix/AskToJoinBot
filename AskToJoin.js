@@ -76,7 +76,7 @@ client.on('interactionCreate', async (interaction) => {
         }
         await i.deferUpdate();
       }else {
-        interaction.editReply({content: 'This button is not for you dumbass', ephemeral: true});
+        interaction.reply({content: 'This button is not for you dumbass', ephemeral: true});
     }
     });
 
