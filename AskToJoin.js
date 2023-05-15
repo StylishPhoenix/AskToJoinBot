@@ -64,7 +64,7 @@ const filter = (reaction, user) => {
 };
 
     pollMessage.awaitReactions({ filter: filter, time: 60000 })
-          .then(collected => { if (reaction.emoji.name === '✅') { votes.yes++; } else if (reaction.emoji.name === '❌') { votes.no++;} })
+          .then(collected => { console.log(`test`); if (reaction.emoji.name === '✅') { votes.yes++; } else if (reaction.emoji.name === '❌') { votes.no++;} })
           .catch(collected => {
             lastVoteEndTime = Date.now();
            if (votes.yes > votes.no) {
