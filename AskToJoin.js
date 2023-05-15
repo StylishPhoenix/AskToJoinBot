@@ -61,13 +61,13 @@ client.on('interactionCreate', async (interaction) => {
 
     const filter = (reaction, user) => {
       const member = voiceChannel.members.get(user.id);
+      console.log(member);
       return ['✅', '❌'].includes(reaction.emoji.name) && !user.bot && member;
     };
 
     const collector = pollMessage.createReactionCollector({filter: filter, time: 60000 });
 
     collector.on('collect', (reaction, user) => {
-      console.log('test');
       if (reaction.emoji.name === '✅') {
         votes.yes++;
       } else if (reaction.emoji.name === '❌') {
