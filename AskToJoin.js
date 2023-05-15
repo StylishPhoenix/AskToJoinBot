@@ -60,12 +60,13 @@ client.on('interactionCreate', async (interaction) => {
     await pollMessage.react(noReaction);
     
 const filter = (reaction, user) => {
-  return ['✅', '❌'].includes(reaction.emoji.name) && user.id === interaction.user.id;
+  return ['✅', '❌'].includes(reaction.emoji.name);
 };
 
     pollMessage.awaitReactions({ filter: filter, time: 30000 })
           .then(collected => {
          		const reaction = collected.first();
+            console.log(`test`);
             if (reaction.emoji.name === '✅') {
               pollMessage.reply('You reacted with a thumbs up.');
             } else {
