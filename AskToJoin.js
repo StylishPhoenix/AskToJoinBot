@@ -60,7 +60,7 @@ client.on('interactionCreate', async (interaction) => {
           .setStyle('1')
       );
 
-    await interaction.reply({ content: question, components: [row] });
+    await interaction.reply({ content: `${members.map((member) => `<@${member.id}>`).join(', ')}, ${question}`, components: [row] });
 
     const filter = i => i.customId === 'yes' || i.customId === 'no';
 
