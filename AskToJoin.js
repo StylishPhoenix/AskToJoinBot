@@ -63,28 +63,17 @@ const filter = (reaction, user) => {
   return reaction.emoji.name === '✅';
 };
 
-    const collector = pollMessage.createReactionCollector({ filter: filter, time: 60000 });
-
-    collector.on('collect', (reaction, user) => {
-      console.log(member);
-      if (reaction.emoji.name === '✅') {
-        votes.yes++;
-      } else if (reaction.emoji.name === '❌') {
-        votes.no++;
-      }
-    });
-
-    collector.on('end', async () => {
-      lastVoteEndTime = Date.now();
-
-      if (votes.yes > votes.no) {
+    pollMessage.awaitReactions({ filter: filter, time: 60000 })
+          .then(collected => { if (reaction.emoji.name === '✅') { votes.yes++; } else if (reaction.emoji.name === '❌') { votes.no++;} })
+          .catch(collected => {
+            lastVoteEndTime = Date.now();
+           if (votes.yes > votes.no) {
         await interaction.member.voice.setChannel(voiceChannel);
         interaction.channel.send(`${interaction.user} has been allowed to join the voice channel.`);
       } else {
         interaction.channel.send(`${interaction.user} has been denied access to the voice channel.`);
       }
     });
-
   }
 });
 
