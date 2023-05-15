@@ -75,7 +75,9 @@ client.on('interactionCreate', async (interaction) => {
           votes.no++;
         }
         await i.deferUpdate();
-      }
+      }else {
+        interaction.editReply({content: 'This button is not for you dumbass', ephemeral: true});
+    }
     });
 
     collector.on('end', async () => {
