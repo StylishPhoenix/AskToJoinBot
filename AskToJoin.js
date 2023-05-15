@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, MessageActionRow, MessageButton, MessageComponentInteraction } = require('discord.js');
+const { Client, GatewayIntentBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageComponentInteraction } = require('discord.js');
 const { token, guildId, voiceChannelId, minimumMembers } = require(`./config.json`);
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
@@ -48,16 +48,16 @@ client.on('interactionCreate', async (interaction) => {
       no: 0,
     };
 
-    const row = new MessageActionRow()
+    const row = new ActionRowBuilder()
       .addComponents(
-        new MessageButton()
+        new ButtonBuilder()
           .setCustomId('yes')
           .setLabel('Yes')
-          .setStyle('SUCCESS'),
-        new MessageButton()
+          .setStyle('1'),
+        new ButtonBuilder()
           .setCustomId('no')
           .setLabel('No')
-          .setStyle('DANGER')
+          .setStyle('1')
       );
 
     await interaction.reply({ content: question, components: [row] });
