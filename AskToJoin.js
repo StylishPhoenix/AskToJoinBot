@@ -62,10 +62,15 @@ client.on('interactionCreate', async (interaction) => {
 
 const filter = (reaction, user) => {
   const member = voiceChannel.members.cache.get(user.id);
+  console.log('Reaction:', reaction.emoji.name);
+  console.log('User:', user.id);
+  console.log('Is bot:', user.bot);
+  console.log('Is member:', !!member);
   return (
     ['✅', '❌'].includes(reaction.emoji.name) && !user.bot && member
   );
 };
+
 
     const collector = pollMessage.createReactionCollector({filter: filter, time: 60000 });
 
