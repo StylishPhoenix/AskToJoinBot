@@ -35,6 +35,7 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     const members = voiceChannel.members;
+    console.log('Voice Channel:', voiceChannel);
 
     if (members.size < minimumMembers) {
       await interaction.member.voice.setChannel(voiceChannel);
@@ -61,10 +62,6 @@ client.on('interactionCreate', async (interaction) => {
 
 const filter = (reaction, user) => {
   const member = voiceChannel.members.cache.get(user.id);
-  console.log('Reaction:', reaction.emoji.name);
-  console.log('User:', user.id);
-  console.log('Is bot:', user.bot);
-  console.log('Is member:', !!member);
   return (
     ['✅', '❌'].includes(reaction.emoji.name) && !user.bot && member
   );
