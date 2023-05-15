@@ -70,7 +70,7 @@ const filter = (reaction, user) => {
               message.reply('You reacted with a thumbs up.');
             } else {
               message.reply('You reacted with a thumbs down.');
-            })
+            }})
           .catch(collected => {
              message.reply('No one voted.');
     });
