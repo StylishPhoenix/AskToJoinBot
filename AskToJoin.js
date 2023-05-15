@@ -48,6 +48,8 @@ client.on('interactionCreate', async (interaction) => {
       no: 0,
     };
 
+    let voters = new Set();
+
     const row = new ActionRowBuilder()
       .addComponents(
         new ButtonBuilder()
@@ -69,6 +71,14 @@ client.on('interactionCreate', async (interaction) => {
     collector.on('collect', async (i) => {
       if (!i.isButton()) return;
       if (voiceChannel.members.get(i.user.id)) {
+        if (voters.has(i.user.id)) {
+          // The user has already voted, ignore this vote
+          return i.reply({ content: 'You have already voted!', ephemeral: true });
+        }
+    
+        // Record the user's vote
+        voters.add(i.user.id);
+
         if (i.customId === 'yes') {
           votes.yes++;
         } else {
@@ -83,7 +93,8 @@ client.on('interactionCreate', async (interaction) => {
 
     collector.on('end', async () => {
       lastVoteEndTime = Date.now();
-
+      //Reset the voters
+      voters = new Set();
       if (votes.yes > votes.no) {
         await interaction.member.voice.setChannel(voiceChannel);
         interaction.channel.send(`${votes.yes} for, ${votes.no} against. ${interaction.user} has been allowed to join the voice channel.`);
