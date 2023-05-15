@@ -64,14 +64,14 @@ const filter = (reaction, user) => {
 };
 
     pollMessage.awaitReactions({ filter: filter, time: 15000 })
-          .then(collected => { console.log(`test`); interaction.channel.send(`${reaction.emoji.name}`); if (reaction.emoji.name === '✅') { votes.yes++; } else if (reaction.emoji.name === '❌') { votes.no++;} })
+          .then(collected => { console.log(`test`); votes.yes++;)
           .catch(collected => {
             lastVoteEndTime = Date.now();
            if (votes.yes > votes.no) {
         interaction.member.voice.setChannel(voiceChannel);
         interaction.channel.send(`${interaction.user} has been allowed to join the voice channel.`);
       } else {
-       // interaction.channel.send(`${interaction.user} has been denied access to the voice channel.`);
+       interaction.channel.send(`${interaction.user} has been denied access to the voice channel.`);
       }
     });
   }
