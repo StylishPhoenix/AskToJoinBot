@@ -34,6 +34,11 @@ client.on('interactionCreate', async (interaction) => {
       return interaction.reply('You must be in a voice channel to use this command.');
     }
 
+     // Check if the user is already in the asktojoin voice channel
+    if (interaction.member.voice.channel.id === voiceChannelId) {
+       return interaction.reply('You are already in the voice channel.');
+    }
+
     const members = voiceChannel.members;
 
     if (members.size < minimumMembers) {
