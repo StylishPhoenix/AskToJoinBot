@@ -71,7 +71,7 @@ const filter = (reaction, user) => {
         interaction.member.voice.setChannel(voiceChannel);
         interaction.channel.send(`${interaction.user} has been allowed to join the voice channel.`);
       } else {
-        interaction.channel.send(`${interaction.user} has been denied access to the voice channel.`);
+       // interaction.channel.send(`${interaction.user} has been denied access to the voice channel.`);
       }
     });
   }
