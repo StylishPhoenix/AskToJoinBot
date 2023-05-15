@@ -48,18 +48,17 @@ client.on('interactionCreate', async (interaction) => {
       no: 0,
     };
 
-    const yesButton = new MessageButton()
-      .setCustomId('yes')
-      .setLabel('Yes')
-      .setStyle('SUCCESS');
-
-    const noButton = new MessageButton()
-      .setCustomId('no')
-      .setLabel('No')
-      .setStyle('DANGER');
-
     const row = new MessageActionRow()
-      .addComponents(yesButton, noButton);
+      .addComponents(
+        new MessageButton()
+          .setCustomId('yes')
+          .setLabel('Yes')
+          .setStyle('SUCCESS'),
+        new MessageButton()
+          .setCustomId('no')
+          .setLabel('No')
+          .setStyle('DANGER')
+      );
 
     await interaction.reply({ content: question, components: [row] });
 
