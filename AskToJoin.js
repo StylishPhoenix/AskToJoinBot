@@ -25,8 +25,8 @@ client.on('interactionCreate', async (interaction) => {
     const collectorFilter = (reaction, user) => {
       return reaction.emoji.name === '👍' && user.id === interaction.author.id;
     };
-    
-    const collector = interaction.createReactionCollector({ filter: collectorFilter, time: 15000 });
+    const test = interaction.channel.send(`Test`);
+    const collector = test.createReactionCollector({ filter: collectorFilter, time: 15000 });
     
     collector.on('collect', (reaction, user) => {
       console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
