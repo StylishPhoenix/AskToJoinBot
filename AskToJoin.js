@@ -1,6 +1,6 @@
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, MessageActionRow, MessageButton, MessageComponentInteraction } = require('discord.js');
 const { token, guildId, voiceChannelId, minimumMembers } = require(`./config.json`);
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent ] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 let lastVoteEndTime = 0;
 
@@ -22,22 +22,7 @@ client.on('interactionCreate', async (interaction) => {
   const { commandName } = interaction;
 
   if (commandName === 'asktojoin') {
-    const collectorFilter = (reaction, user) => {
-      return reaction.emoji.name === '👍' && user.id === interaction.author.id;
-    };
-    const test = await interaction.channel.send(`Test`);
-    await test.react('👍');
-    const collector = test.createReactionCollector({ filter: collectorFilter, time: 15000 });
-    
-    collector.on('collect', (reaction, user) => {
-      console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
-    });
-    
-    collector.on('end', collected => {
-      console.log(`Collected ${collected.size} items`);
-    });
-
-/*    const currentTime = Date.now();
+    const currentTime = Date.now();
 
     if (currentTime - lastVoteEndTime < 60000) {
       return interaction.reply('Please wait for one minute between votes.');
@@ -56,49 +41,54 @@ client.on('interactionCreate', async (interaction) => {
       return interaction.reply('You have been moved into the voice channel.');
     }
 
-    const question = `Should ${interaction.user} be allowed to join the voice channel? React with ✅ or ❌`;
+    const question = `Should ${interaction.user} be allowed to join the voice channel? Click on the buttons below to vote.`;
 
     let votes = {
       yes: 0,
       no: 0,
     };
 
-    await interaction.reply('Voting has started. Please wait for the result.');
+    const yesButton = new MessageButton()
+      .setCustomId('yes')
+      .setLabel('Yes')
+      .setStyle('SUCCESS');
 
-    const pollMessage = await interaction.channel.send(
-      `${members.map((member) => `<@${member.id}>`).join(', ')}, ${question}`
-    );
-    const yesReaction = '✅';
-    const noReaction = '❌';
-    
-    await pollMessage.react(yesReaction);
-    await pollMessage.react(noReaction);
-    
-const filter = (reaction, user) => {
-  return ['✅', '❌'].includes(reaction.emoji.name);
-};
+    const noButton = new MessageButton()
+      .setCustomId('no')
+      .setLabel('No')
+      .setStyle('DANGER');
 
-    pollMessage.awaitReactions({ filter: filter, time: 30000 })
-          .then(collected => {
-         		const reaction = collected.first();
-            console.log(`test`);
-            if (reaction.emoji.name === '✅') {
-              pollMessage.reply('You reacted with a thumbs up.');
-            } else {
-              pollMessage.reply('You reacted with a thumbs down.');
-            }})
-          .catch(collected => {
-             pollMessage.reply('No one voted.');
+    const row = new MessageActionRow()
+      .addComponents(yesButton, noButton);
+
+    await interaction.reply({ content: question, components: [row] });
+
+    const filter = i => i.customId === 'yes' || i.customId === 'no';
+
+    const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
+
+    collector.on('collect', async (i) => {
+      if (!i.isButton()) return;
+      if (voiceChannel.members.get(i.user.id)) {
+        if (i.customId === 'yes') {
+          votes.yes++;
+        } else {
+          votes.no++;
+        }
+        await i.deferUpdate();
+      }
     });
-    lastVoteEndTime = Date.now();
-    if (votes.yes > votes.no) {
-      interaction.member.voice.setChannel(voiceChannel);
-      interaction.channel.send(`${interaction.user} has been allowed to join the voice channel.`);
-    } else {
-      interaction.channel.send(`${interaction.user} has been denied access to the voice channel.`);
-    }
-  } */
 
+    collector.on('end', async () => {
+      lastVoteEndTime = Date.now();
+
+      if (votes.yes > votes.no) {
+        await interaction.member.voice.setChannel(voiceChannel);
+        interaction.channel.send(`${interaction.user} has been allowed to join the voice channel.`);
+      } else {
+        interaction.channel.send(`${interaction.user} has been denied access to the voice channel.`);
+      }
+    });
   }
 });
 
