@@ -68,6 +68,7 @@ const filter = (reaction, user) => {
     const collector = pollMessage.createReactionCollector({ filter: filter, time: 60000 });
 
     collector.on('collect', (reaction, user) => {
+      console.log(reaction.emoji.name);
       if (reaction.emoji.name === '✅') {
         votes.yes++;
         console.log(`test`);
