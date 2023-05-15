@@ -68,7 +68,7 @@ const filter = (reaction, user) => {
           .catch(collected => {
             lastVoteEndTime = Date.now();
            if (votes.yes > votes.no) {
-        await interaction.member.voice.setChannel(voiceChannel);
+        interaction.member.voice.setChannel(voiceChannel);
         interaction.channel.send(`${interaction.user} has been allowed to join the voice channel.`);
       } else {
         interaction.channel.send(`${interaction.user} has been denied access to the voice channel.`);
