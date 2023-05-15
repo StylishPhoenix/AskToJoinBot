@@ -58,8 +58,14 @@ client.on('interactionCreate', async (interaction) => {
     
     await pollMessage.react(yesReaction);
     await pollMessage.react(noReaction);
+    
+const filter = (reaction, user) => {
+  console.log('Reaction:', reaction.emoji.name);
+  console.log('User:', user.id);
+  return true; // Always return true to collect any reaction
+};
 
-    const collector = pollMessage.createReactionCollector({ time: 60000 });
+    const collector = pollMessage.createReactionCollector({ filter: filter, time: 60000 });
 
     collector.on('collect', (reaction, user) => {
       if (reaction.emoji.name === '✅') {
