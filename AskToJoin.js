@@ -59,7 +59,7 @@ client.on('interactionCreate', async (interaction) => {
     await pollMessage.react(yesReaction);
     await pollMessage.react(noReaction);
 
-const filter = (reaction, user) => {
+const test = (reaction, user) => {
   const member = voiceChannel.members.cache.get(user.id);
   console.log('Reaction:', reaction.emoji.name);
   console.log('User:', user.id);
@@ -71,7 +71,7 @@ const filter = (reaction, user) => {
 };
 
 
-    const collector = pollMessage.createReactionCollector({filter: filter, time: 60000 });
+    const collector = pollMessage.createReactionCollector({filter: test, time: 60000 });
 
     collector.on('collect', (reaction, user) => {
       if (reaction.emoji.name === '✅') {
