@@ -106,7 +106,7 @@ client.on('interactionCreate', async (interaction) => {
         interaction.channel.send(`${votes.yes} for, ${votes.no} against. ${interaction.user} has been allowed to join the voice channel.`);
         } catch (error) {
           console.error('Error moving member to voice channel:', error);
-          interaction.channel.send('An error occurred while moving you to the voice channel.');
+          interaction.channel.send('An error occurred while moving you to the voice channel. Did you leave before you were moved?');
         }
       } else {
         interaction.channel.send(`${votes.yes} for, ${votes.no} against. ${interaction.user} has been denied access to the voice channel.`);
