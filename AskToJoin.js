@@ -77,7 +77,7 @@ client.on('interactionCreate', async (interaction) => {
         await i.deferUpdate();
       }else {
         await i.deferUpdate();
-        i.followUp({content: 'This button is not for you dumbass', ephemeral: true});
+        i.followUp({content: 'Leggo my eggo', ephemeral: true});
     }
     });
 
@@ -86,9 +86,9 @@ client.on('interactionCreate', async (interaction) => {
 
       if (votes.yes > votes.no) {
         await interaction.member.voice.setChannel(voiceChannel);
-        interaction.channel.send(`${interaction.user} has been allowed to join the voice channel.`);
+        interaction.channel.send(`${votes.yes} for, ${votes.no} against. ${interaction.user} has been allowed to join the voice channel.`);
       } else {
-        interaction.channel.send(`${interaction.user} has been denied access to the voice channel.`);
+        interaction.channel.send(`${votes.yes} for, ${votes.no} against. ${interaction.user} has been denied access to the voice channel.`);
       }
     });
   }
