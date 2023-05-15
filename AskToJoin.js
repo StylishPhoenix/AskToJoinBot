@@ -64,6 +64,7 @@ client.on('interactionCreate', async (interaction) => {
     collector.on('collect', (reaction, user) => {
       if (reaction.emoji.name === '✅') {
         votes.yes++;
+        console.log(`test`);
       } else if (reaction.emoji.name === '❌') {
         votes.no++;
       }
