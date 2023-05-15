@@ -35,7 +35,6 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     const members = voiceChannel.members;
-    console.log('Voice Channel:', voiceChannel);
 
     if (members.size < minimumMembers) {
       await interaction.member.voice.setChannel(voiceChannel);
