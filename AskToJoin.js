@@ -1,5 +1,5 @@
 const { Client, GatewayIntentBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageComponentInteraction } = require('discord.js');
-const { token, guildId, voiceChannelId, minimumMembers } = require(`./config.json`);
+const { token, guildId, voiceChannelId, minimumMembers, voteTimer } = require(`./config.json`);
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 let lastVoteEndTime = 0;
@@ -71,7 +71,7 @@ client.on('interactionCreate', async (interaction) => {
 
     const filter = i => i.customId === 'yes' || i.customId === 'no';
 
-    const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
+    const collector = interaction.channel.createMessageComponentCollector({ filter, time: voteTimer });
 
     collector.on('collect', async (i) => {
       if (!i.isButton()) return;
