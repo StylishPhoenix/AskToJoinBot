@@ -1,8 +1,10 @@
 const { Client, GatewayIntentBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageComponentInteraction } = require('discord.js');
 const { token, guildId, voiceChannelId, minimumMembers, voteTimer } = require(`./config.json`);
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers] });
 
 let lastVoteEndTime = 0;
+
+let lastLeftTimes = new Map();
 
 client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -14,6 +16,13 @@ client.on('ready', async () => {
 
   const commands = await client.guilds.cache.get(guildId)?.commands.set([data]);
   console.log('Slash command registered');
+});
+
+client.on('voiceStateUpdate', (oldState, newState) => {
+  // If the user has left the voiceChannelId, save the time
+  if (oldState.channelId === voiceChannelId && !newState.channelId) {
+    lastLeftTimes.set(newState.id, Date.now());
+  }
 });
 
 client.on('interactionCreate', async (interaction) => {
@@ -33,6 +42,18 @@ client.on('interactionCreate', async (interaction) => {
     if (!interaction.member.voice.channel) {
       return interaction.reply('You must be in a voice channel to use this command.');
     }
+
+  // Check if the user left the channel less than 5 minutes ago
+  const lastLeft = lastLeftTimes.get(interaction.user.id);
+  if (lastLeft && Date.now() - lastLeft < 5 * 60 * 1000) {
+    try {
+      await interaction.member.voice.setChannel(voiceChannel);
+      return interaction.reply('You have been moved into the voice channel.');
+    } catch (error) {
+      console.error('Error moving member to voice channel:', error);
+      return interaction.reply('An error occurred while moving you to the voice channel.');
+    }
+  }
 
      // Check if the user is already in the asktojoin voice channel
     if (interaction.member.voice.channel.id === voiceChannelId) {
