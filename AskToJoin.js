@@ -121,7 +121,7 @@ client.on('interactionCreate', async (interaction) => {
       lastVoteEndTime = Date.now();
       //Reset the voters
       voters = new Set();
-      if (votes.yes > votes.no) {
+      if (votes.yes > votes.no || votes.no == 0) {
         try {
         await interaction.member.voice.setChannel(voiceChannel);
         interaction.channel.send(`${votes.yes} for, ${votes.no} against. ${interaction.user} has been allowed to join the voice channel.`);
